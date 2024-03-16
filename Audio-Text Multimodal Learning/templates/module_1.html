@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Voice Input</title>
+  <style>
+    body{
+      text-align: center;
+      font-size: xx-large;
+      margin:auto;  
+    }
+
+  </style>
+</head>
+<body>
+    <h1 style="background-color: darkcyan;">Audio - Text Coherence</h1>
+    <form method="post">
+    Enter Text <input type="text" name="input"><br><br>
+    Record Your Audio:<br>
+    <button type="button" onclick="startRecording()">Start Recording</button>
+    <button type="button" onclick="stopRecording()">Stop Recording</button>
+    <a id="downloadLink" style="display: none;"></a>
+      <br><br>
+    <input type="submit" value="submit" style="font-size: large;">        
+  
+    </form>
+    {% if result %}
+    <p>{{ result }}</p>    
+    {% endif %}
+  <script>
+    const recognition = new webkitSpeechRecognition() || SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    let recordedContent = '';
+
+    recognition.onresult = function(event) {
+      const result = event.results[event.results.length - 1];
+      if (result.isFinal) {
+        const transcript = result[0].transcript;
+        recordedContent += transcript + ' ';
+      }
+    }
+
+    function startRecording() {
+      recognition.start();
+    }
+
+    function stopRecording() {
+      recognition.stop();
+
+      // Create a text file with the recorded content
+      const textFile = new Blob([recordedContent], { type: 'text/plain' });
+
+      // Create a download link
+      const downloadLink = document.getElementById('downloadLink');
+      downloadLink.href = URL.createObjectURL(textFile);
+      downloadLink.download = 'recorded_content.txt';
+      downloadLink.click();
+    }
+  </script>
+</body>
+</html>

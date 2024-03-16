@@ -1,0 +1,13 @@
+flask
+pyaudio
+wave
+speech_recognition
+wave
+nltk
+spacy
+transformers
+sklearn
+pytorch
+sentence_transformer
+pyttsx3
+
